@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="mail_check_wrap"/>
+		<item key="selection" value="이메일이"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="mail_check_wrap"/>
-			<item value="mail_check_input"/>
-			<item value="mail_check_"/>
-			<item value="input_box"/>
-			<item value="vam"/>
-			<item value="mysql"/>
-			<item value="log4"/>
-			<item value="java.sun"/>
-			<item value="log"/>
-			<item value="junit"/>
-			<item value="spring-test"/>
-			<item value="org.spring"/>
-			<item value="test"/>
-			<item value="hikari"/>
-			<item value="Jun"/>
+			<item value="이메일이"/>
+			<item value="idckCheck"/>
+			<item value="id_ck"/>
+			<item value="mailForm"/>
+			<item value="style"/>
+			<item value="id_input_re"/>
+			<item value="sapn"/>
+			<item value="이메일을"/>
+			<item value="check_button"/>
+			<item value="id_input_re_1"/>
+			<item value="사용 가능한 아이디"/>
+			<item value="이메일 형식이"/>
+			<item value="pwck_input_re"/>
+			<item value="final_pwck_ck"/>
+			<item value="pwckcor"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -3,16 +3,20 @@ package com.vampa.controller;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vampa.model.MemberVO;
 import com.vampa.service.MemberService;
@@ -28,6 +32,9 @@ public class MemberController {
 	@Autowired
 	private JavaMailSender mailSender; //이메일 전송을 위한 JavaMailSender 클래스를 mailSender 생성자 생성
 	
+	@Autowired
+	private BCryptPasswordEncoder pwEncoder; //BCryptPasswordEncoder 의존성 주입
+	
 	/*
 	 * 회원가입 페이지 이동
 	 */
@@ -41,11 +48,17 @@ public class MemberController {
 	 */
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String joinPOST(MemberVO member) throws Exception {
-		logger.info("join 진입");
+
+		//기본 회원가입 -> memberservice.memberJoin(member);
 		
-		//회원가입 서비스 실행
-		memberservice.memberJoin(member);
-		logger.info("join service 성공");
+		//스프링 시큐리티 회원가입
+		String rawPw = ""; //BCrypt 인코딩 전 패스워드
+		String encodePw = ""; //인코딩 후 패스워드
+		
+		rawPw = member.getMemberPw(); //MemberVO에서 getter를 통해 패스워드 획득
+		encodePw = pwEncoder.encode(rawPw); //본래 패스워드 암호화
+		member.setMemberPw(encodePw); //암호화된 패스워드 Setter를 통해 저장
+		memberservice.memberJoin(member); //회원가입 쿼리 실행
 		
 		return "redirect:/main"; //메인 페이지로 이동
 	}
@@ -64,6 +77,21 @@ public class MemberController {
 		}
 		else {
 			return "success"; //중복된 아이디가 없음
+		}
+	}
+	
+	/*
+	 * 이메일 주복성 검사
+	 */
+	@RequestMapping(value = "/memberMailChk", method = RequestMethod.POST)
+	@ResponseBody
+	public String memberMailChkPOST(String memberMail) throws Exception {
+		int result = memberservice.mailCheck(memberMail);
+		if(result != 0) {
+			return "fail";
+		}
+		else {
+			return "success";
 		}
 	}
 	
@@ -112,5 +140,30 @@ public class MemberController {
 		logger.info("로그인 페이지 진입");
 	}
 	
+	/*
+	 * 로그인 기능 수행 - @@@   안돼서 주석처리 해뒀음 혹시 참고할 거면 참고하라고 @@@@
+	 */
+	
+	/*코드주석
+	@RequestMapping(value= "login", method = RequestMethod.POST)
+	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
+		
+		HttpSession session = request.getSession(); //세션을 사용하기 위한 전형적인 방법
+		MemberVO lvo = memberservice.memberLogin(member); //서버로부터 받은 member변수를 사용
+														  //memberLogin메소드 수행 시 MemberMapper.java를 거쳐 로그인 쿼리 실행 -> 결과값이 담긴 MemberVO객체를 lvo에 저장
+		//lvo는 아디/비번이 존재하면 memberId, memberName, adminCk, (money, point: 내 기준 나중에 삭제할 요소들) 데이터가 담긴 MemberVO 객체로 저장됨.
+		//->만약 아디/비번이 존재하지 않으면 null이 저장됨. 따라서 null->로그인 실패->로그인페이지로 다시 redirect 하여 로그인 재요청
+		if(lvo == null) { //아디/비번 존재하지 않을 시
+			int result = 0;
+			rttr.addFlashAttribute("result", result); //redirect시 데이터를 전달 자세한 건 용어정리 폴더에 RedirectAttributes.txt 파일 참고 간단하게 말해서 여러개 데이터 전송 + 휘발성데이터
+			System.out.println(result);
+			return "redirect:/member/login";
+		}
+		
+		session.setAttribute("member", lvo); //아디/비번이 존재함 -> 로그인 성공
+		
+		return "redirect:/main";
+	}
+	코드 주석 끝 */
 
 }

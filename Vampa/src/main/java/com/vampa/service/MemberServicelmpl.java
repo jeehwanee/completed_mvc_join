@@ -27,4 +27,20 @@ public class MemberServicelmpl implements MemberService {
 	public int idCheck(String memberId) throws Exception {
 		return membermapper.idCheck(memberId); //Mapper의 idCheck 수행
 	}
+	
+	/*
+	 * 이메일 중복성 검사
+	 */
+	@Override
+	public int mailCheck(String memberMail) throws Exception {
+		return membermapper.mailCheck(memberMail);
+	}
+	
+	/*
+	 * 로그인 구현 안 돼서 주석 처리 해둠@@
+	 
+	@Override
+	public MemberVO memberLogin(MemberVO member) throws Exception {
+		return membermapper.memberLogin(member);
+	}*/
 }

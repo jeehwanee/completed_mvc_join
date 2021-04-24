@@ -30,10 +30,6 @@ public class MemberVO {
 	//등록일자
 	private int regDate;
 	
-	//회원 돈
-	private int money;
-	//호원 포인트
-	private int point;
 	
 	@Override /*상속 시 메소드를 재정의해서 내가 원하는대로 코딩을 가능하게 만듦. 
 				VS
@@ -41,7 +37,6 @@ public class MemberVO {
 	public String toString() {
 		return "MemberVO [memberId=" + memberId + ", memberPw=" + memberPw + ", memberName=" + memberName
 				+ ", memberMail=" + memberMail + ", memberAddr1=" + memberAddr1 + ", memberAddr2=" + memberAddr2
-				+ ", memberAddr3=" + memberAddr3 + ", adminCk=" + adminCk + ", regDate=" + regDate + ", money=" + money
-				+ ", point=" + point + "]";
+				+ ", memberAddr3=" + memberAddr3 + ", adminCk=" + adminCk + ", regDate=" + regDate + "]";
 	}
 }
